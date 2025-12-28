@@ -92,7 +92,7 @@ let floodLegend;
 // for map
 //----------------
 let chartPerMunicipality;
-
+let chartPerDistrict;
 
 
 async function loadSuggestData() {
@@ -551,10 +551,11 @@ async function searchCrimeData(description) {
     `;
 
     // Make radar chart of $municipality vs average
-    if (chartPerMunicipality) {
-        chartPerMunicipality.destroy();
-    }
+    chartPerMunicipality && chartPerMunicipality.destroy();
+    chartPerDistrict && chartPerDistrict.destroy();
+
     const ctx_mun = document.getElementById('result_crime_chart');
+    const ctx_dis = document.getElementById('result_crime_chart_district');
 
     const chartDataMun = {
         labels: [
@@ -580,15 +581,61 @@ async function searchCrimeData(description) {
             hoverOffset: 4,
             options: {
                 responsive: true,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                plugins : {
+                    title: {
+                        display: true,
+                        text: `${municipality}全体`
+                    }
+                }
             }
         }]
     };
 
-    chartPerMunicipality = new Chart( ctx_mun, {
+    const chartDataDis = {
+        labels: [
+            CrimeTranslations.get("violent_crimes_total"),
+            CrimeTranslations.get("assault_total"),
+            CrimeTranslations.get("non_burglary_total"),
+            CrimeTranslations.get("burglary_total")
+        ],
+        datasets: [{
+            label: `${municipality}${district}`,
+            data: [
+                row["violent_crimes_total"],
+                row["assault_total"],
+                row["non_burglary_total"],
+                row["burglary_total"],
+            ],
+            backgroundColor: [
+                'rgb(255, 0, 0)',
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+                'rgb(255, 205, 86)',
+            ],
+            hoverOffset: 4,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins : {
+                    title: {
+                        display: true,
+                        text: `${municipality}${district}`
+                    }
+                }
+            }
+        }]
+    };
+
+    chartPerMunicipality = new Chart(ctx_mun, {
         type: 'pie',
         data: chartDataMun
-    } );
+    });
+
+    chartPerDistrict = new Chart(ctx_dis, {
+        type: 'pie',
+        data: chartDataDis
+    });
 }
 
 async function showHeader() {
