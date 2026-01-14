@@ -426,6 +426,20 @@ async function searchCrimeData(description) {
         <div class="row text-center gap-3">
             <div class="col-md-4">
                 <div class="card text-bg-primary border-mb-3">
+                    <div class="card-header">凶悪犯</div>
+                    <div class="card-body">
+                        <h2 class="card-title text-center">
+                            ${row["violent_crimes_total"]}
+                        </h2>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                殺人、強盗、放火、強姦など
+                            </small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-bg-primary border-mb-3">
                     <div class="card-header">粗暴犯</div>
                     <div class="card-body">
                         <h2 class="card-title text-center">
@@ -470,6 +484,20 @@ async function searchCrimeData(description) {
 　　　　　</div>
         <h5>${municipality}全体</h5>
         <div class="row text-center">
+            <div class="col-md-4">
+                <div class="card text-bg-primary border-mb-3">
+                    <div class="card-header">凶悪犯</div>
+                    <div class="card-body">
+                        <h2 class="card-title text-center">
+                            ${row_per_municipality["violent_crimes_total"]}
+                        </h2>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                殺人、強盗、放火、強姦など
+                            </small></p>
+                       </div>
+                </div>
+            </div>
             <div class="col-md-4">
                 <div class="card text-bg-primary border-mb-3">
                     <div class="card-header">粗暴犯</div>
