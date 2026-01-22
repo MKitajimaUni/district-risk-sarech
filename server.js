@@ -175,7 +175,7 @@ app.get("/api/search_description", async (req, res) => {
 
 // deriver dependent files
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html", "housing.html"));
 });
 
 // start server

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東京都　住所から駅検索</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts/housing.js" type="module"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <a class="navbar-brand" href="index.html">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">地域危険性検索</a></li>
+            <li class="nav-item"><a class="nav-link" href="housing.html">駅検索</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <h1 class="text-center mb-4">東京都　住所から駅検索</h1>
+
+    <div id="home" class="mb-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">区市町名</label>
+                <input id="municipality" type="text" class="form-control" placeholder="例：新宿区">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">町丁目名</label>
+                <input id="district" type="text" class="form-control" placeholder="例：西新宿1丁目">
+            </div>
+        </div>
+
+        <div class="mt-4 text-end">
+            <button id="searchBtn" class="btn btn-primary btn-lg">検索</button>
+        </div>
+    </div>
+
+    <div id="result" class="mb-4" style="">
+        <div id="hazard_map" class="mb-4">
+            <h2>マップ</h2>
+            <div id="map_flood" style="height: 400px; " class="mb-5"></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

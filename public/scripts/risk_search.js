@@ -1,4 +1,4 @@
-// public/app.js
+// public/risk_search.js
 const TABLE = "earthquake_risk_full";
 const AREA_COUNT = 5192;
 const Translations = new Map([
@@ -89,13 +89,13 @@ let marker;
 let floodLegend;
 
 //----------------
-// for map
+// for chart
 //----------------
 let chartPerMunicipality;
 let chartPerDistrict;
 
 //----------------
-// for　loading modal
+// for loading modal
 //----------------
 let loadingModal = null;
 
