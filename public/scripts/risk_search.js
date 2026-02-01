@@ -1,4 +1,3 @@
-// public/risk_search.js
 const TABLE = "earthquake_risk_full";
 const AREA_COUNT = 5192;
 const Translations = new Map([
@@ -57,7 +56,6 @@ const CrimeTranslations = new Map([
     ["gambling", "その他賭博"],
     ["other_penal_codes", "その他その他刑法犯"]
 ]);
-
 const ElementColor = new Map(
     [[1, "secondary"],
         [2, "primary"],
@@ -65,6 +63,7 @@ const ElementColor = new Map(
         [4, "warning"],
         [5, "danger"],]
 );
+
 
 // ----------------------------
 // Data for suggestion
@@ -81,13 +80,17 @@ window.addEventListener("DOMContentLoaded", loadSuggestData);
 // For map
 // ----------------------------
 let baseMap;
+
 let riverLayer;
 let pluvialLayer;
 let riverMaxLayer;
 let tsunamiLayer;
 let heightLayer;
+
 let marker;
+
 let floodLegend;
+let heightLegend;
 
 //----------------
 // for chart
@@ -737,7 +740,7 @@ async function fetchMap() {
     marker = L.marker([lat, lon]).addTo(baseMap);
 }
 
-function clearFloodLayers() {
+function clearUpperLayers() {
     riverLayer && baseMap.removeLayer(riverLayer);
     pluvialLayer && baseMap.removeLayer(pluvialLayer);
     riverMaxLayer && baseMap.removeLayer(riverMaxLayer);
@@ -748,10 +751,15 @@ function clearFloodLayers() {
         baseMap.removeControl(floodLegend);
         floodLegend = null;
     }
+
+    if (heightLegend) {
+        baseMap.removeControl(heightLegend);
+        heightLegend = null;
+    }
 }
 
 async function fetchMapWithRiverFlood() {
-    clearFloodLayers();
+    clearUpperLayers();
 
     try {
         if (!riverLayer) {
@@ -773,7 +781,7 @@ async function fetchMapWithRiverFlood() {
 }
 
 async function fetchMapWithMaxRiverFlood() {
-    clearFloodLayers();
+    clearUpperLayers();
 
     try {
         if (!riverMaxLayer) {
@@ -795,7 +803,7 @@ async function fetchMapWithMaxRiverFlood() {
 }
 
 async function fetchMapWithPluvialFlood() {
-    clearFloodLayers();
+    clearUpperLayers();
 
     try {
         if (!pluvialLayer) {
@@ -817,11 +825,11 @@ async function fetchMapWithPluvialFlood() {
 }
 
 async function fetchMapWithTsunami() {
-    clearFloodLayers();
+    clearUpperLayers();
 
     try {
-        if (!heightLayer) {
-            heightLayer = L.tileLayer(
+        if (!tsunamiLayer) {
+            tsunamiLayer = L.tileLayer(
                 "https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_pref_data/13/{z}/{x}/{y}.png",
                 {
                     opacity: 0.6,
@@ -829,7 +837,7 @@ async function fetchMapWithTsunami() {
                 }
             );
         }
-        heightLayer.addTo(baseMap);
+        tsunamiLayer.addTo(baseMap);
         addFloodLegend();
 
     } catch (error) {
@@ -839,11 +847,11 @@ async function fetchMapWithTsunami() {
 }
 
 async function fetchMapWithHeight() {
-    clearFloodLayers();
+    clearUpperLayers();
 
     try {
-        if (!tsunamiLayer) {
-            tsunamiLayer = L.tileLayer(
+        if (!heightLayer) {
+            heightLayer = L.tileLayer(
                 "https://cyberjapandata.gsi.go.jp/xyz/d1-no455/{z}/{x}/{y}.png",
                 {
                     // Because this tile map has another map as a base map,
@@ -853,7 +861,8 @@ async function fetchMapWithHeight() {
                 }
             );
         }
-        tsunamiLayer.addTo(baseMap);
+        heightLayer.addTo(baseMap);
+        addHeightLegend();
 
     } catch (error) {
         console.log(error);
@@ -876,6 +885,24 @@ function addFloodLegend() {
     };
 
     floodLegend.addTo(baseMap);
+}
+
+function addHeightLegend() {
+    if (heightLegend) return;
+
+    heightLegend = L.control({position: "bottomright"});
+
+    heightLegend.onAdd = function () {
+        const div = L.DomUtil.create("div", "height");
+        div.innerHTML = `
+        <img src="/img/height_legend.png"
+            style="width:120px; padding:5px; border-radius:4px;">
+        `;
+
+        return div;
+    }
+
+    heightLegend.addTo(baseMap);
 }
 
 function addMapLayer() {
@@ -908,7 +935,7 @@ function addMapLayer() {
             break;
         }
         case "clear": {
-            clearFloodLayers();
+            clearUpperLayers();
             document.getElementById("map-current-state").innerText = ``;
             break;
         }
