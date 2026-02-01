@@ -85,6 +85,7 @@ let riverLayer;
 let pluvialLayer;
 let riverMaxLayer;
 let tsunamiLayer;
+let heightLayer;
 let marker;
 let floodLegend;
 
@@ -101,6 +102,8 @@ let loadingModal = null;
 
 async function loadSuggestData() {
     console.log("Loading municipality/district list from server...");
+    enableLoadingHover();
+    setLoadingDescription("検索用データを読み込み中...");
 
     let start = 0;
     const pagesize = 1000;
@@ -129,6 +132,7 @@ async function loadSuggestData() {
     console.log("districtsMap:", districtsMap.size);
 
     attachSuggestListeners();
+    disableLoadingHover();
 }
 
 // ----------------------------
@@ -713,11 +717,7 @@ async function fetchMap() {
     const {lat, lon} = await getGeocodeAddress("東京都" + municipality + district);
     const zoom = 15;
 
-    //keeps the layer state when the pin moved
-    //clearFloodLayers();
-
     if (!baseMap) {
-        //map = L.map("map").setView([lat, lon], zoom);
         baseMap = L.map("map_flood").setView([lat, lon], zoom);
 
         const baseLayer = L.tileLayer(
@@ -725,19 +725,15 @@ async function fetchMap() {
             {attribution: "© OpenStreetMap"}
         );
 
-        //baseMap.addTo(map);
         baseLayer.addTo(baseMap);
 
 
     } else {
-        //map.setView([lat, lon], zoom);
         baseMap.setView([lat, lon], zoom);
     }
 
-    //if (marker) marker.remove();
     if (marker) marker.remove();
 
-    //marker = L.marker([lat, lon]).addTo(map);
     marker = L.marker([lat, lon]).addTo(baseMap);
 }
 
@@ -746,6 +742,7 @@ function clearFloodLayers() {
     pluvialLayer && baseMap.removeLayer(pluvialLayer);
     riverMaxLayer && baseMap.removeLayer(riverMaxLayer);
     tsunamiLayer && baseMap.removeLayer(tsunamiLayer);
+    heightLayer && baseMap.removeLayer(heightLayer)
 
     if (floodLegend) {
         baseMap.removeControl(floodLegend);
@@ -823,8 +820,8 @@ async function fetchMapWithTsunami() {
     clearFloodLayers();
 
     try {
-        if (!tsunamiLayer) {
-            tsunamiLayer = L.tileLayer(
+        if (!heightLayer) {
+            heightLayer = L.tileLayer(
                 "https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_pref_data/13/{z}/{x}/{y}.png",
                 {
                     opacity: 0.6,
@@ -832,12 +829,35 @@ async function fetchMapWithTsunami() {
                 }
             );
         }
-        tsunamiLayer.addTo(baseMap);
+        heightLayer.addTo(baseMap);
         addFloodLegend();
 
     } catch (error) {
         console.log(error);
         alert("洪水情報取得に失敗しました");
+    }
+}
+
+async function fetchMapWithHeight() {
+    clearFloodLayers();
+
+    try {
+        if (!tsunamiLayer) {
+            tsunamiLayer = L.tileLayer(
+                "https://cyberjapandata.gsi.go.jp/xyz/d1-no455/{z}/{x}/{y}.png",
+                {
+                    // Because this tile map has another map as a base map,
+                    // Overlap tile with the layer
+                    opacity: 1.0,
+                    attribution: '出典: <a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>'
+                }
+            );
+        }
+        tsunamiLayer.addTo(baseMap);
+
+    } catch (error) {
+        console.log(error);
+        alert("標高情報取得に失敗しました");
     }
 }
 
@@ -880,6 +900,16 @@ function addMapLayer() {
         case "tsunami": {
             fetchMapWithTsunami();
             document.getElementById("map-current-state").innerText = `表示中：（島嶼部のみ）津波浸水想定`;
+            break;
+        }
+        case "height": {
+            fetchMapWithHeight();
+            document.getElementById("map-current-state").innerText = `表示中：（23区のみ）標高地形図`;
+            break;
+        }
+        case "clear": {
+            clearFloodLayers();
+            document.getElementById("map-current-state").innerText = ``;
             break;
         }
         default:
