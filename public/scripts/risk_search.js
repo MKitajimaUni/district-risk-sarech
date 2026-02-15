@@ -240,11 +240,6 @@ async function searchFloodData(description) {
     // 1レコード想定
     const row = data[0];
 
-    // Assumption: pluvial_url is a subset of river_url.
-    if (row["pluvial_url"] == null) {
-        row["pluvial_url"] = row["river_url"];
-    }
-
     document.getElementById("result_flood").innerHTML = `
     <h2>洪水に関する情報</h2>
     <div class="card mb-4">
@@ -273,13 +268,17 @@ async function searchFloodData(description) {
                     </tr>
                     <tr>
                         <th class="bg-light">内水ハザードマップ</th>
-                        <td><a href="${row["pluvial_url"]}">こちらからアクセスできます</a></td>
+                        <td id="pluvial-url"><a href="${row["pluvial_url"]}">こちらからアクセスできます</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
     `;
+
+    if (row["pluvial_url"] == null) {
+        document.getElementById("pluvial-url").innerHTML = `公開されていません`
+    }
 }
 
 async function searchEarthquakeData(description) {
@@ -317,8 +316,8 @@ async function searchEarthquakeData(description) {
         </div>
         <div class="row text-center">
             <!-- 総合危険度 -->          
-            <div class="col-md-4">
-                <div class="card text-bg-light border-mb-3 border-${ElementColor.get(row["total_risk_index"])}">
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3 border-${ElementColor.get(row["total_risk_index"])}">
                     <div class="card-header">総合危険度</div>
                     <div class="card-body">
                         <h2 class="card-title text-center text-${ElementColor.get(row["total_risk_index"])}">
@@ -334,7 +333,7 @@ async function searchEarthquakeData(description) {
                 </div>
             </div>
             <!-- 火災危険度 -->
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3 border-${ElementColor.get(row["fire_risk_index"])}">
                     <div class="card-header">火災危険度</div>
                     <div class="card-body">
@@ -351,7 +350,7 @@ async function searchEarthquakeData(description) {
                 </div>
             </div>
             <!-- 建物倒壊危険度 -->
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3 border-${ElementColor.get(row["building_collapse_risk_index"])}">
                     <div class="card-header">建物倒壊危険度</div>
                     <div class="card-body">
@@ -433,8 +432,8 @@ async function searchCrimeData(description) {
         <h5>${municipality}${district}</h5>
         
         <div class="row text-center">
-            <div class="col-md-4">
-                <div class="card text-bg-light border-mb-3">
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3">
                     <div class="card-header">凶悪犯</div>
                     <div class="card-body">
                         <h2 class="card-title text-center">
@@ -447,8 +446,8 @@ async function searchCrimeData(description) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-bg-light border-mb-3">
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3">
                     <div class="card-header">粗暴犯</div>
                     <div class="card-body">
                         <h2 class="card-title text-center">
@@ -462,7 +461,7 @@ async function searchCrimeData(description) {
                     </div>
                 </div>
             </div>           
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3">
                     <div class="card-header">侵入窃盗</div>
                     <div class="card-body">
@@ -476,7 +475,7 @@ async function searchCrimeData(description) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3">
                     <div class="card-header">非侵入窃盗</div>
                     <div class="card-body">
@@ -493,8 +492,8 @@ async function searchCrimeData(description) {
 　　　　　</div>
         <h5>${municipality}全体</h5>
         <div class="row text-center">
-            <div class="col-md-4">
-                <div class="card text-bg-light border-mb-3">
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3">
                     <div class="card-header">凶悪犯</div>
                     <div class="card-body">
                         <h2 class="card-title text-center">
@@ -507,8 +506,8 @@ async function searchCrimeData(description) {
                        </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-bg-light border-mb-3">
+            <div class="col-sm-4">
+                <div class="card text-bg-light mb-3">
                     <div class="card-header">粗暴犯</div>
                     <div class="card-body">
                         <h2 class="card-title text-center}">
@@ -522,7 +521,7 @@ async function searchCrimeData(description) {
                     </div>
                 </div>
             </div>           
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3">
                     <div class="card-header">侵入窃盗</div>
                     <div class="card-body">
@@ -536,7 +535,7 @@ async function searchCrimeData(description) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-sm-4">
                 <div class="card text-bg-light mb-3">
                     <div class="card-header">非侵入窃盗</div>
                     <div class="card-body">

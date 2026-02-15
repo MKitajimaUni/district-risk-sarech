@@ -66,7 +66,7 @@ app.get("/api/search_crime", async (req, res) => {
     // This should be fixed in the database later.
     let municipality_fixed;
     let district_fixed;
-    if (municipality == "町田市") {
+    if (municipality === "町田市") {
         municipality_fixed = "町";
         district_fixed = "田市" + district;
     } else {

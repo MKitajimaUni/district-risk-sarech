@@ -16,7 +16,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="index.html">Home</a>
+    <a class="navbar-brand" href="index.html">東京都　地域危険性検索ツール</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,7 @@
 </nav>
 
 <div class="container-fluid">
-    <h1 class="text-center mb-4">東京都　地域危険性検索ツール</h1>
+    <h1 class="text-center mb-4">地域危険性検索</h1>
 
     <div class="modal fade" id="loading-popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -70,20 +70,27 @@
 
         <div id="hazard_map" class="mb-4">
             <h2>ハザードマップ</h2>
-            <div id="search-form" class="mb-3">
-                <label for="flood-select">知りたい情報を選択してください:</label>
-                <select class="form-select" name="flood" id="flood-select">
-                    <option value="" disabled>選択してください</option>
-                    <option value="clear">マップレイヤを消去</option>
-                    <option value="" disabled><-- 洪水に関する情報 --></option>
-                    <option value="river">洪水浸水想定区域（計画規模（現在の凡例））</option>
-                    <option value="river-max">洪水浸水想定区域（想定最大規模）</option>
-                    <option value="" disabled><-- 標高に関する情報 --></option>
-                    <option value="height">（23区のみ）標高地形図</option>
-                    <option value="height-tokyo"> （東京都全域）標高地形図</option>
-                </select>
-                <button type="button" class="btn btn-secondary" onclick="addMapLayer()">検索</button>
-                <p id="map-current-state" class="form-text text-muted"></p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="search-form" class="mb-3">
+                        <label for="flood-select">知りたい情報を選択してください:</label>
+                        <select class="form-select" name="flood" id="flood-select">
+                            <option value="" disabled>選択してください</option>
+                            <option value="clear">マップレイヤを消去</option>
+                            <option value="" disabled><-- 洪水に関する情報 --></option>
+                            <option value="river">洪水浸水想定区域（計画規模（現在の凡例））</option>
+                            <option value="river-max">洪水浸水想定区域（想定最大規模）</option>
+                            <option value="" disabled><-- 標高に関する情報 --></option>
+                            <option value="height">（23区のみ）標高地形図</option>
+                            <option value="height-tokyo"> （東京都全域）標高地形図</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-secondary" onclick="addMapLayer()">検索</button>
+                    <p id="map-current-state" class="form-text text-muted"></p>
+                </div>
             </div>
             <div id="map_flood" style="height: 400px;" class="mb-5"></div>
         </div>
@@ -92,13 +99,13 @@
 
         <div id="result_crime" class="mb-5">
             <div id="result_crime_card" class="mb-3"></div>
-            <div id="result_crime_graph" class="mb-5">
+            <div id="result_crime_graph" class="mb-3">
                 <h5>グラフで見る（市区町村合計/地区毎）</h5>
-                <div class="row g-3">
-                    <div class="col-12 col-md-6">
+                <div class="row text-center">
+                    <div class="col-md-6" style="max-width: 400px;">
                         <canvas id="result_crime_chart"></canvas>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-md-6" style="max-width: 400px;">
                         <canvas id="result_crime_chart_district"></canvas>
                     </div>
                 </div>
